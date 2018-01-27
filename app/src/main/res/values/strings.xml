@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Quiz</string>
+    <string name="topics">Topics</string>
+    <string name="main_graphic">Logo graphic</string>
+    <string name="rb_easy">Easy</string>
+    <string name="rb_medium">Medium</string>
+    <string name="rb_hard">Hard</string>
+</resources>
