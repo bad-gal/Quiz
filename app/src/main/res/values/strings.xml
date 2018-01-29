@@ -5,4 +5,6 @@
     <string name="rb_easy">Easy</string>
     <string name="rb_medium">Medium</string>
     <string name="rb_hard">Hard</string>
+    <string name="question">Question goes here</string>
+    <string name="index">Index</string>
 </resources>

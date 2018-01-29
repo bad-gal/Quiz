@@ -1,5 +1,6 @@
 package com.developments.knowledgehut.quiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -8,6 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
+import java.io.Serializable
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,9 +40,22 @@ class MainActivity : AppCompatActivity() {
 
                     if (questionUrl != "") {
                         val urlQuestions = getData(questionUrl)
-                        println(convertJsonToQuestionList(urlQuestions))
-                    }
+                        val (questions, choices, answers) = convertJsonToQuestionList(urlQuestions)
 
+                        val detailIntent = Intent()
+                        detailIntent.setClass(this, DetailActivity().javaClass)
+                        detailIntent.putExtra("category", adapt.adapter.getItem(i).toString())
+                        detailIntent.putExtra("difficulty", radioButtonText)
+                        detailIntent.putStringArrayListExtra("questions", questions as ArrayList<String>?)
+                        detailIntent.putStringArrayListExtra("answers", answers as ArrayList<String>)
+
+                        val bundle = Bundle()
+                        bundle.putSerializable("choices", choices as Serializable)
+                        detailIntent.putExtras(bundle)
+                        startActivity(detailIntent)
+
+
+                    }
                 })
     }
 
@@ -48,11 +64,11 @@ class MainActivity : AppCompatActivity() {
         return getRequest.execute(urlString).get()
     }
 
-    private fun convertJsonToQuestionList(jsonString: String): Triple<MutableList<String>, MutableList<MutableList<String>>, MutableList<String>> {
+    private fun convertJsonToQuestionList(jsonString: String): Triple<MutableList<String>, Array<List<String>>, MutableList<String>> {
 
         val questionList = mutableListOf<String>()
-        val choiceList = mutableListOf(mutableListOf<String>())
         val answerList = mutableListOf<String>()
+        var choiceList = Array<List<String>>(10) { mutableListOf<String>()}
 
         val jsonObject = JSONObject(jsonString)
         val jsonArray = jsonObject.getJSONArray("results")
@@ -70,9 +86,9 @@ class MainActivity : AppCompatActivity() {
             val incorrectArray = jObject.getJSONArray("incorrect_answers")
             (0 until incorrectArray.length()).mapTo(shortAnswer) { incorrectArray.get(it).toString() }
             shortAnswer.shuffle()
-            choiceList.add(shortAnswer)
+            choiceList[i] = shortAnswer
+
         }
-        choiceList.removeAt(0)
         return Triple(questionList,choiceList, answerList)
     }
 

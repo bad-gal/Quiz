@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:src="@drawable/quiz_letters_red" android:contentDescription="@string/main_graphic" />
+        android:src="@drawable/quiz_letters_red"
+        android:contentDescription="@string/main_graphic" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="casual"
             android:text="@string/rb_easy" />
 
         <RadioButton
@@ -42,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="casual"
             android:text="@string/rb_medium" />
 
         <RadioButton
@@ -49,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="casual"
             android:text="@string/rb_hard" />
 
     </RadioGroup>
