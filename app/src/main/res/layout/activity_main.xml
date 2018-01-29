@@ -23,11 +23,12 @@
         android:textSize="30sp" />
 
     <RadioGroup
+        android:id="@+id/rg_difficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:checkedButton="@+id/rb_easy">
+        android:checkedButton="@+id/rb_easy"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rb_easy"
@@ -53,7 +54,7 @@
     </RadioGroup>
 
     <ListView
-        android:id="@+id/lv_topics"
+        android:id="@+id/lv_categories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
