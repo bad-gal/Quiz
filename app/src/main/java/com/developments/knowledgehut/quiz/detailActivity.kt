@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.method.ScrollingMovementMethod
+import android.view.View
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -13,8 +14,10 @@ class DetailActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        var userAnswers = mutableListOf<String>()
+        val userAnswers = mutableListOf<String>()
         val buttonlist = mutableListOf<RadioButton>()
+        var questionIndex = 0
+        var radioChecked = 0
 
         intent = this.intent
 
@@ -28,16 +31,42 @@ class DetailActivity: AppCompatActivity() {
         tv_question.movementMethod = ScrollingMovementMethod()
         tv_question.text = questions[0]
 
+        btn_next.text = resources.getString(R.string.btn_next)
+        btn_next.visibility = View.INVISIBLE
+
+        println(questions.toString())
         setRadioButtons(buttonlist, choices[0])
 
         rg_choices.setOnCheckedChangeListener { group, checkedId ->
-            val radioButton = group.findViewById<RadioButton>(checkedId)
+            radioChecked = checkedId
+            btn_next.visibility = View.VISIBLE
+
+        }
+
+        btn_next.setOnClickListener {
+            val radioButton = rg_choices.findViewById<RadioButton>(radioChecked)
+            questionIndex++
+            showNextQuestion(radioButton, userAnswers, questionIndex, questions, buttonlist, choices)
+            btn_next.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showNextQuestion(radioButton: RadioButton, userAnswers: MutableList<String>,
+                                 questionIndex: Int, questions: List<String>, buttonlist: MutableList<RadioButton>, choices: Array<List<String>>) {
+
             userAnswers.add(radioButton.tag.toString())
 
-            tv_question.text = questions[1] //display next question
-            rg_choices.removeAllViews()
-            setRadioButtons(buttonlist, choices[1])
-        }
+            if (questionIndex < questions.size) {
+                tv_question.text = questions[questionIndex]
+                rg_choices.clearCheck()
+                rg_choices.removeAllViews()
+                setRadioButtons(buttonlist, choices[questionIndex])
+
+                if (questionIndex == questions.size - 1) {
+                    btn_next.text = resources.getString(R.string.btn_results)
+                } else btn_next.text = resources.getString(R.string.btn_next)
+            }
+
     }
 
     private fun getIntentData(intent: Intent, name: String): Any {
