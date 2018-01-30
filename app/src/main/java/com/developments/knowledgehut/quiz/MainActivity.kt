@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_main.*
+import org.apache.commons.text.StringEscapeUtils
 import org.json.JSONObject
 import java.io.Serializable
 import java.util.*
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         val questionList = mutableListOf<String>()
         val answerList = mutableListOf<String>()
-        var choiceList = Array<List<String>>(10) { mutableListOf<String>()}
+        val choiceList = Array<List<String>>(10) { mutableListOf()}
 
         val jsonObject = JSONObject(jsonString)
         val jsonArray = jsonObject.getJSONArray("results")
@@ -76,15 +77,19 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until jsonArray.length()) {
             val jObject: JSONObject = jsonArray.get(i) as JSONObject
             val question = jObject.get("question") as String
-            questionList.add(question)
+            val questionConvert = StringEscapeUtils.unescapeHtml4(question)
+            questionList.add(questionConvert)
 
             val shortAnswer = mutableListOf<String>()
             val correctAnswer = jObject.get("correct_answer") as String
-            answerList.add(correctAnswer)
-            shortAnswer.add(correctAnswer)
+            val correctConvert = StringEscapeUtils.unescapeHtml4(correctAnswer)
+            answerList.add(correctConvert)
+            shortAnswer.add(correctConvert)
 
             val incorrectArray = jObject.getJSONArray("incorrect_answers")
-            (0 until incorrectArray.length()).mapTo(shortAnswer) { incorrectArray.get(it).toString() }
+            (0 until incorrectArray.length()).mapTo(shortAnswer) {
+                StringEscapeUtils.unescapeHtml4(incorrectArray.get(it).toString())
+            }
             shortAnswer.shuffle()
             choiceList[i] = shortAnswer
 
@@ -102,7 +107,8 @@ class MainActivity : AppCompatActivity() {
             val jObject: JSONObject = jsonArray.get(i) as JSONObject
             val id = jObject.get("id") as Int
             val strObject = jObject.get("name") as String
-            val category = Categories(id, strObject)
+            val strConvert = StringEscapeUtils.unescapeHtml4(strObject)
+            val category = Categories(id, strConvert)
             dbHelper.addCategory(category)
             categoryList.add(strObject)
         }
@@ -111,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun retrieveUserSelectedQuiz(categoryEntry: Categories?, level: String): String {
         val baseUrl = "https://opentdb.com/api.php?amount=10&"
-        var category = ""
+        val category: String
         val difficulty = "&difficulty=" + level.toLowerCase()
 
         if (categoryEntry != null) {

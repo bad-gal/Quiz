@@ -11,7 +11,7 @@ class HttpGetRequest: AsyncTask<String, Void, String>() {
 
     override fun doInBackground(vararg params: String?): String {
         val stringUrl = params[0]
-        var result = ""
+        var result: String
 
         try {
             val url = URL(stringUrl)

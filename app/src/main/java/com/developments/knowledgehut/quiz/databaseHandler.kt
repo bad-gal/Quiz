@@ -22,12 +22,12 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
     }
 
     companion object {
-        private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "quizzes.db"
-        val TABLE_CATEGORIES = "categories"
-        val COLUMN_ID = "_id"
-        val COLUMN_CATEGORY_ID = "cat_id"
-        val COLUMN_CATEGORY = "category"
+        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "quizzes.db"
+        private const val TABLE_CATEGORIES = "categories"
+        private const val COLUMN_ID = "_id"
+        private const val COLUMN_CATEGORY_ID = "cat_id"
+        private const val COLUMN_CATEGORY = "category"
     }
 
     fun addCategory(categories: Categories) {
