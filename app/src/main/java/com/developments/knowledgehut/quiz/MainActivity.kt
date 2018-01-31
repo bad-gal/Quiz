@@ -54,8 +54,6 @@ class MainActivity : AppCompatActivity() {
                         bundle.putSerializable("choices", choices as Serializable)
                         detailIntent.putExtras(bundle)
                         startActivity(detailIntent)
-
-
                     }
                 })
     }

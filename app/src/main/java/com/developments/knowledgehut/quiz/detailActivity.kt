@@ -1,5 +1,6 @@
 package com.developments.knowledgehut.quiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -18,6 +19,7 @@ class DetailActivity: AppCompatActivity() {
         val buttonlist = mutableListOf<RadioButton>()
         var questionIndex = 0
         var radioChecked = 0
+        var correct = 0
 
         intent = this.intent
 
@@ -34,39 +36,62 @@ class DetailActivity: AppCompatActivity() {
         btn_next.text = resources.getString(R.string.btn_next)
         btn_next.visibility = View.INVISIBLE
 
+        progressBar2.max = 10
+        progressBar2.progress = 0
+
         println(questions.toString())
         setRadioButtons(buttonlist, choices[0])
 
         rg_choices.setOnCheckedChangeListener { group, checkedId ->
             radioChecked = checkedId
-            btn_next.visibility = View.VISIBLE
-
+            if (questionIndex < questions.size) {
+                btn_next.visibility = View.VISIBLE
+            }
         }
 
         btn_next.setOnClickListener {
             val radioButton = rg_choices.findViewById<RadioButton>(radioChecked)
+
+            userAnswers.add(radioButton.tag.toString())
+            if (radioButton.tag.toString() == answers[questionIndex]) {
+                correct++
+            }
+
             questionIndex++
-            showNextQuestion(radioButton, userAnswers, questionIndex, questions, buttonlist, choices)
-            btn_next.visibility = View.INVISIBLE
+            progressBar2.progress = questionIndex
+
+            if (questionIndex == questions.size) {
+                showResults(questions.size, correct.toFloat())
+            } else {
+                showNextQuestion(questionIndex, questions, buttonlist, choices)
+                btn_next.visibility = View.INVISIBLE
+            }
         }
     }
 
-    private fun showNextQuestion(radioButton: RadioButton, userAnswers: MutableList<String>,
-                                 questionIndex: Int, questions: List<String>, buttonlist: MutableList<RadioButton>, choices: Array<List<String>>) {
+    private fun showNextQuestion(questionIndex: Int, questions: List<String>,
+                                 buttonlist: MutableList<RadioButton>, choices: Array<List<String>>) {
 
-            userAnswers.add(radioButton.tag.toString())
+        if (questionIndex < questions.size) {
+            tv_question.text = questions[questionIndex]
+            rg_choices.clearCheck()
+            rg_choices.removeAllViews()
+            setRadioButtons(buttonlist, choices[questionIndex])
 
-            if (questionIndex < questions.size) {
-                tv_question.text = questions[questionIndex]
-                rg_choices.clearCheck()
-                rg_choices.removeAllViews()
-                setRadioButtons(buttonlist, choices[questionIndex])
+            if (questionIndex == questions.size - 1) {
+                btn_next.text = resources.getString(R.string.btn_results)
+            } else btn_next.text = resources.getString(R.string.btn_next)
+        }
+    }
 
-                if (questionIndex == questions.size - 1) {
-                    btn_next.text = resources.getString(R.string.btn_results)
-                } else btn_next.text = resources.getString(R.string.btn_next)
-            }
+    @SuppressLint("SetTextI18n")
+    private fun showResults(size: Int, correct: Float) {
+        val percentage = (correct / size) * 100
 
+        tv_question.text = "You got ${percentage.toInt()}% correct"
+        btn_next.visibility = View.INVISIBLE
+        rg_choices.clearCheck()
+        rg_choices.removeAllViews()
     }
 
     private fun getIntentData(intent: Intent, name: String): Any {
