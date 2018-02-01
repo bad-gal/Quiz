@@ -37,23 +37,29 @@ class MainActivity : AppCompatActivity() {
                 { adapt: AdapterView<*>, _: View, i: Int, _: Long ->
 
                     val category = getCategoryItem(adapt.adapter.getItem(i).toString())
-                    val questionUrl = retrieveUserSelectedQuiz(category, radioButtonText)
+                    val noOfQuestions = getNumberOfQuestions(category, radioButtonText)
 
-                    if (questionUrl != "") {
-                        val urlQuestions = getData(questionUrl)
-                        val (questions, choices, answers) = convertJsonToQuestionList(urlQuestions)
+                    if (noOfQuestions > 0) {
+                        val questionUrl = retrieveUserSelectedQuiz(category, radioButtonText, noOfQuestions)
 
-                        val detailIntent = Intent()
-                        detailIntent.setClass(this, DetailActivity().javaClass)
-                        detailIntent.putExtra("category", adapt.adapter.getItem(i).toString())
-                        detailIntent.putExtra("difficulty", radioButtonText)
-                        detailIntent.putStringArrayListExtra("questions", questions as ArrayList<String>?)
-                        detailIntent.putStringArrayListExtra("answers", answers as ArrayList<String>)
+                        if (questionUrl != "") {
+                            val urlQuestions = getData(questionUrl)
+                            val (questions, choices, answers) = convertJsonToQuestionList(urlQuestions)
 
-                        val bundle = Bundle()
-                        bundle.putSerializable("choices", choices as Serializable)
-                        detailIntent.putExtras(bundle)
-                        startActivity(detailIntent)
+                            val detailIntent = Intent()
+                            detailIntent.setClass(this, DetailActivity().javaClass)
+                            detailIntent.putExtra("category", adapt.adapter.getItem(i).toString())
+                            detailIntent.putExtra("difficulty", radioButtonText)
+                            detailIntent.putStringArrayListExtra("questions", questions as ArrayList<String>?)
+                            detailIntent.putStringArrayListExtra("answers", answers as ArrayList<String>)
+
+                            val bundle = Bundle()
+                            bundle.putSerializable("choices", choices as Serializable)
+                            detailIntent.putExtras(bundle)
+                            startActivity(detailIntent)
+                        }
+                    } else {
+                        //add toast to tell user that no questions can be found
                     }
                 })
     }
@@ -113,16 +119,45 @@ class MainActivity : AppCompatActivity() {
         return categoryList
     }
 
-    private fun retrieveUserSelectedQuiz(categoryEntry: Categories?, level: String): String {
-        val baseUrl = "https://opentdb.com/api.php?amount=10&"
+    private fun convertJsonToQuestionCount(jsonString: String, difficulty: String): Int {
+        val jsonObject = JSONObject(jsonString)
+        val jsonArray = jsonObject.getJSONObject("category_question_count")
+
+                    when (difficulty) {
+                        "Easy" -> return jsonArray.get("total_easy_question_count") as Int
+                        "Medium" -> return jsonArray.get("total_medium_question_count") as Int
+                        "Hard" -> return jsonArray.get("total_hard_question_count") as Int
+                    }
+
+        return 0
+    }
+
+    private fun retrieveUserSelectedQuiz(categoryEntry: Categories?, level: String, amount: Int): String {
+        val newAmount: Int
+
+
+        newAmount = if (amount > 10) { 10 } else amount
+
+        val baseUrl = "https://opentdb.com/api.php?amount=$newAmount&"
+
         val category: String
         val difficulty = "&difficulty=" + level.toLowerCase()
 
         if (categoryEntry != null) {
             category = "category=" + categoryEntry.catId
+            println(baseUrl + category + difficulty)
             return baseUrl + category + difficulty
         }
         return ""
+    }
+
+    private fun getNumberOfQuestions(categoryEntry: Categories?, level: String): Int {
+        if (categoryEntry != null) {
+            val baseUrl = "https://opentdb.com/api_count.php?category=${categoryEntry.catId}"
+            val questionStats = getData(baseUrl)
+            return convertJsonToQuestionCount(questionStats, level)
+        }
+        return 0
     }
 
     private fun getCategoryItem(name: String): Categories? {

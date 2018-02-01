@@ -36,7 +36,7 @@ class DetailActivity: AppCompatActivity() {
         btn_next.text = resources.getString(R.string.btn_next)
         btn_next.visibility = View.INVISIBLE
 
-        progressBar2.max = 10
+        progressBar2.max = questions.size
         progressBar2.progress = 0
 
         println(questions.toString())
