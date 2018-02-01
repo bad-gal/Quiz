@@ -1,5 +1,6 @@
 package com.developments.knowledgehut.quiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.apache.commons.text.StringEscapeUtils
 import org.json.JSONObject
@@ -15,6 +17,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -59,7 +62,8 @@ class MainActivity : AppCompatActivity() {
                             startActivity(detailIntent)
                         }
                     } else {
-                        //add toast to tell user that no questions can be found
+                       val toast =  Toast.makeText(this, "No questions could be found!", Toast.LENGTH_LONG)
+                        toast.show()
                     }
                 })
     }
@@ -134,7 +138,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun retrieveUserSelectedQuiz(categoryEntry: Categories?, level: String, amount: Int): String {
         val newAmount: Int
-
 
         newAmount = if (amount > 10) { 10 } else amount
 
