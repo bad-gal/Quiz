@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
                             val detailIntent = Intent()
                             detailIntent.setClass(this, DetailActivity().javaClass)
+                            detailIntent.putExtra("category_id", category?.catId)
                             detailIntent.putExtra("category", adapt.adapter.getItem(i).toString())
                             detailIntent.putExtra("difficulty", radioButtonText)
                             detailIntent.putStringArrayListExtra("questions", questions as ArrayList<String>?)
@@ -137,9 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun retrieveUserSelectedQuiz(categoryEntry: Categories?, level: String, amount: Int): String {
-        val newAmount: Int
-
-        newAmount = if (amount > 10) { 10 } else amount
+        val newAmount: Int = if (amount > 10) { 10 } else amount
 
         val baseUrl = "https://opentdb.com/api.php?amount=$newAmount&"
 
