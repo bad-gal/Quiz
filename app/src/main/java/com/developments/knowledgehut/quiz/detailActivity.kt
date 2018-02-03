@@ -73,14 +73,14 @@ class DetailActivity: AppCompatActivity() {
 
             if (questionIndex == questions.size) {
                 val percentage = showResults(questions.size, correct.toFloat())
-                val convertIt = convertToJson(questions, answers, userAnswers)
-                if (convertIt != null) {
+                val convertIt = convertToJson(questions, answers, userAnswers) as String
+
                     val dbHelper = DatabaseHandler(this, null, null, 1)
                     val completedQuiz = CompletedQuiz(categoryId, level, convertIt, percentage, Date().time.toString())
                     dbHelper.addCompletedQuiz(completedQuiz)
                     val allQuizzesCompleted = dbHelper.findAllCompletedQuizzes()
                     println(allQuizzesCompleted.toString())
-                }
+
             } else {
                 showNextQuestion(questionIndex, questions, buttonlist, choices)
                 btn_next.visibility = View.INVISIBLE

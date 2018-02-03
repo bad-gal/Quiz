@@ -21,6 +21,7 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
                 TABLE_COMPLETED_QUIZ + "(" +
                 CQ_COLUMN_ID + " INTEGER PRIMARY KEY," +
                 CQ_COLUMN_CATEGORY_ID + " INTEGER," +
+                CQ_DIFFICULTY + " TEXT," +
                 CQ_COLUMN_RESULTS + " TEXT," +
                 CQ_PERCENTAGE + " INTEGER," +
                 CQ_TIMESTAMP + " TEXT)")
@@ -49,6 +50,7 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
         private const val CQ_COLUMN_RESULTS = "results"
         private const val CQ_PERCENTAGE = "percentage"
         private const val CQ_TIMESTAMP = "timestamp"
+        private const val CQ_DIFFICULTY = "difficulty"
     }
 
     fun addCategory(categories: Categories) {
@@ -84,6 +86,7 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
     fun addCompletedQuiz(completedQuiz: CompletedQuiz) {
         val values = ContentValues()
         values.put(CQ_COLUMN_CATEGORY_ID, completedQuiz.catId)
+        values.put(CQ_DIFFICULTY, completedQuiz.difficulty)
         values.put(CQ_COLUMN_RESULTS, completedQuiz.results)
         values.put(CQ_PERCENTAGE, completedQuiz.percent)
         values.put(CQ_TIMESTAMP, completedQuiz.timestamp)

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Quiz</string>
     <string name="topics">Topics</string>
+    <string name="complete_header">Your Completed Quizzes</string>
     <string name="main_graphic">Logo graphic</string>
     <string name="rb_easy">Easy</string>
     <string name="rb_medium">Medium</string>
