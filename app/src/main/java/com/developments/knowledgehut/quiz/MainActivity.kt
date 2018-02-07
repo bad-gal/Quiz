@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,6 +18,11 @@ import java.io.Serializable
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +74,13 @@ class MainActivity : AppCompatActivity() {
                         toast.show()
                     }
                 })
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menu = com.developments.knowledgehut.quiz.Menu()
+        menu.menuSelection(this, item, this)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getData(urlString: String): String {

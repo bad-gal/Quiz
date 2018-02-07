@@ -6,20 +6,24 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.method.ScrollingMovementMethod
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.util.*
 
-//TODO: Include Gson Json converter - DONE
-//TODO: Create object of elements to be included in Json e.g questions etc - DONE
-//TODO: Create database table that will accept the json - DONE
-//TODO: Save user quiz details (json) to database
 //TODO: Write method that allows user to view their past quizzes
 //TODO: Write method that allows user to replay their past quizzes
 
 class DetailActivity: AppCompatActivity() {
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +91,14 @@ class DetailActivity: AppCompatActivity() {
             }
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menu = com.developments.knowledgehut.quiz.Menu()
+        menu.menuSelection(this, item, this)
+        return super.onOptionsItemSelected(item)
+    }
+
+
 
     private fun showNextQuestion(questionIndex: Int, questions: List<String>,
                                  buttonlist: MutableList<RadioButton>, choices: Array<List<String>>) {

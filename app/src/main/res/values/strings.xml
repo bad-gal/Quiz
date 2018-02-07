@@ -10,4 +10,7 @@
     <string name="index">Index</string>
     <string name="btn_next">Next ></string>
     <string name="btn_results">Get Results!</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+    <string name="history">History</string>
 </resources>
