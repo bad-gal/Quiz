@@ -39,7 +39,7 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
 
     companion object {
         private const val DATABASE_VERSION = 1
-        private const val DATABASE_NAME = "test_trivia.db"
+        private const val DATABASE_NAME = "test_quiz.db"
         private const val TABLE_CATEGORIES = "categories"
         private const val COLUMN_ID = "_id"
         private const val COLUMN_CATEGORY_ID = "cat_id"
@@ -53,18 +53,50 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
         private const val CQ_DIFFICULTY = "difficulty"
     }
 
-    fun addCategory(categories: Categories) {
-        val values = ContentValues()
-        values.put(COLUMN_CATEGORY_ID, categories.catId)
-        values.put(COLUMN_CATEGORY, categories.category)
-
+    fun recordExists(catId: String): Boolean {
+        val query = "SELECT * FROM $TABLE_CATEGORIES WHERE $COLUMN_CATEGORY_ID=\"$catId\""
         val db = this.writableDatabase
-        db.insert(TABLE_CATEGORIES, null, values)
+        val cursor = db.rawQuery(query, null)
+        val exists = cursor.count > 0
+        cursor.close()
         db.close()
+        return exists
+    }
+
+    fun addCategory(categories: Categories) {
+        if (!recordExists((categories.catId).toString())) {
+            val values = ContentValues()
+            values.put(COLUMN_CATEGORY_ID, categories.catId)
+            values.put(COLUMN_CATEGORY, categories.category)
+
+            val db = this.writableDatabase
+            db.insert(TABLE_CATEGORIES, null, values)
+            db.close()
+        }
     }
 
     fun findCategory(name: String): Categories? {
         val query = "SELECT * FROM $TABLE_CATEGORIES WHERE $COLUMN_CATEGORY = \"$name\""
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+        var category: Categories? = null
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst()
+
+            val id = Integer.parseInt(cursor.getString(0))
+            val catId = Integer.parseInt(cursor.getString(1))
+            val catName = cursor.getString(2)
+            category = Categories(id, catId, catName)
+            cursor.close()
+        }
+
+        db.close()
+        return category
+    }
+
+    fun findCategoryByCatId(catId: String): Categories? {
+        val query = "SELECT * FROM $TABLE_CATEGORIES WHERE $COLUMN_CATEGORY_ID = \"$catId\""
         val db = this.writableDatabase
         val cursor = db.rawQuery(query, null)
         var category: Categories? = null
@@ -116,6 +148,7 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
             } while (cursor.moveToNext())
         }
         cursor.close()
+        db.close()
 
         return list
     }

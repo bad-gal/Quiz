@@ -6,6 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_completed_quizzes.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SavedQuizzesActivity : AppCompatActivity() {
 
@@ -29,21 +31,22 @@ class SavedQuizzesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getCompletedQuizList() : List<String> {
-        val list = mutableListOf<String>()
+    private fun getCompletedQuizList() : List<String?> {
+        val dbHelper = DatabaseHandler(this, null, null, 1)
+        val list = dbHelper.findAllCompletedQuizzes()
 
-        list.add("A")
-        list.add("B")
-        list.add("C")
+        val convertedList = mutableListOf<String>()
+        for (item in list) {
+            val category = dbHelper.findCategoryByCatId("${item?.catId}")
 
-        return list
+            val timeStampToLong = item?.timestamp?.toLong()
+            if (timeStampToLong != null) {
+                val date = Date(timeStampToLong)
+                val mydate = SimpleDateFormat("dd/MM/yyyy HH:mm").format(date)
+                val string = "${category?.category}: ${mydate}"
+                convertedList.add(string)
+            }
+        }
+        return convertedList
     }
-    //need to display category name
-    // I already have the ID from the completed quiz table, I just need to search the category table for the text
-
-    //need to display the difficulty
-    //I already have this in the completed quiz table
-
-    //need to display the date
-    //I already have this in the completed quiz table, I need to convert it into a readable date
 }
