@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item
-        android:id="@+id/about" android:icon="@android:drawable/ic_dialog_info" app:showAsAction="never" android:title="@string/about">
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_white"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/about" app:showAsAction="never" android:title="@string/about">
     </item>
     <item
         android:id="@+id/exit"  app:showAsAction="never" android:title="@string/exit">

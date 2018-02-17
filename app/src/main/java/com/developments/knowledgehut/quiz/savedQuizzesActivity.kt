@@ -38,12 +38,12 @@ class SavedQuizzesActivity : AppCompatActivity() {
         val convertedList = mutableListOf<String>()
         for (item in list) {
             val category = dbHelper.findCategoryByCatId("${item?.catId}")
-
+            val correct = item?.percent
             val timeStampToLong = item?.timestamp?.toLong()
             if (timeStampToLong != null) {
                 val date = Date(timeStampToLong)
-                val mydate = SimpleDateFormat("dd/MM/yyyy HH:mm").format(date)
-                val string = "${category?.category}: ${mydate}"
+                val mydate = SimpleDateFormat("dd/MM/yyyy").format(date)
+                val string = "Category: ${category?.category} \nDate: $mydate \nCorrect: $correct%"
                 convertedList.add(string)
             }
         }
