@@ -14,14 +14,17 @@ import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.util.*
 
-//TODO: Write method that allows user to view their past quizzes
-//TODO: Write method that allows user to replay their past quizzes
-
 class DetailActivity: AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menu = com.developments.knowledgehut.quiz.Menu()
+        menu.menuSelection(this, item, this)
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("SetTextI18n")
@@ -40,8 +43,11 @@ class DetailActivity: AppCompatActivity() {
         val categoryId = getIntentData(intent,"category_id") as Int
         val text = getIntentData(intent, "category")
         val level = getIntentData(intent, "difficulty") as String
+        @Suppress("UNCHECKED_CAST")
         val questions = getIntentData(intent, "questions") as List<String>
+        @Suppress("UNCHECKED_CAST")
         val answers = getIntentData(intent, "answers") as List<String>
+        @Suppress("UNCHECKED_CAST")
         val choices = getIntentData(intent, "choices") as Array<List<String>>
 
         tv_header.text = "$text - Difficulty: $level"
@@ -57,7 +63,7 @@ class DetailActivity: AppCompatActivity() {
         println(questions.toString())
         setRadioButtons(buttonlist, choices[0])
 
-        rg_choices.setOnCheckedChangeListener { group, checkedId ->
+        rg_choices.setOnCheckedChangeListener { _, checkedId ->
             radioChecked = checkedId
             if (questionIndex < questions.size) {
                 btn_next.visibility = View.VISIBLE
@@ -79,7 +85,7 @@ class DetailActivity: AppCompatActivity() {
                 val percentage = showResults(questions.size, correct.toFloat())
                 val convertIt = convertToJson(questions, answers, userAnswers) as String
 
-                    val dbHelper = DatabaseHandler(this, null, null, 1)
+                    val dbHelper = DatabaseHandler(this, null)
                     val completedQuiz = CompletedQuiz(categoryId, level, convertIt, percentage, Date().time.toString())
                     dbHelper.addCompletedQuiz(completedQuiz)
                     val allQuizzesCompleted = dbHelper.findAllCompletedQuizzes()
@@ -91,14 +97,6 @@ class DetailActivity: AppCompatActivity() {
             }
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val menu = com.developments.knowledgehut.quiz.Menu()
-        menu.menuSelection(this, item, this)
-        return super.onOptionsItemSelected(item)
-    }
-
-
 
     private fun showNextQuestion(questionIndex: Int, questions: List<String>,
                                  buttonlist: MutableList<RadioButton>, choices: Array<List<String>>) {

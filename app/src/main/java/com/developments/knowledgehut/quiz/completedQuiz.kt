@@ -15,5 +15,4 @@ data class CompletedQuiz(
         this.percent = percent
         this.timestamp = timestamp
     }
-
 }

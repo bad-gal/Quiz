@@ -1,9 +1,12 @@
 package com.developments.knowledgehut.quiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_completed_quizzes.*
 import java.text.SimpleDateFormat
@@ -23,6 +26,15 @@ class SavedQuizzesActivity : AppCompatActivity() {
         val completedList = getCompletedQuizList()
         val adapter = ArrayAdapter<String>(this, R.layout.list_item_quiz, completedList)
         lv_quiz_completed.adapter = adapter
+
+        lv_quiz_completed.onItemClickListener= AdapterView.OnItemClickListener(
+                { adapt: AdapterView<*>, _: View, i: Int, _: Long ->
+                    val oldQuizIntent = Intent()
+                    oldQuizIntent.setClass(this, ViewOldQuiz().javaClass)
+                    oldQuizIntent.putExtra("completed_quiz_row", i + 1)
+                    startActivity(oldQuizIntent)
+                }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -32,7 +44,7 @@ class SavedQuizzesActivity : AppCompatActivity() {
     }
 
     private fun getCompletedQuizList() : List<String?> {
-        val dbHelper = DatabaseHandler(this, null, null, 1)
+        val dbHelper = DatabaseHandler(this, null)
         val list = dbHelper.findAllCompletedQuizzes()
 
         val convertedList = mutableListOf<String>()

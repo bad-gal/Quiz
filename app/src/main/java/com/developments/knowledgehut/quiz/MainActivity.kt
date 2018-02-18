@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun convertJsonToList(jsonString: String): List<String> {
-        val dbHelper = DatabaseHandler(this, null, null, 1)
+        val dbHelper = DatabaseHandler(this, null)
         val categoryList = mutableListOf<String>()
         val jsonObject = JSONObject(jsonString)
         val jsonArray = jsonObject.getJSONArray("trivia_categories")
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCategoryItem(name: String): Categories? {
-        val dbHelper = DatabaseHandler(this, null, null, 1)
+        val dbHelper = DatabaseHandler(this, null)
         return dbHelper.findCategory(name)
     }
 }

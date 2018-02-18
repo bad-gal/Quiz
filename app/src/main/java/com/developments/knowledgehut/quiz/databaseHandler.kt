@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 
 
-class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?,
-                      version: Int): SQLiteOpenHelper(context, DATABASE_NAME, factory,
+class DatabaseHandler(context: Context, factory: SQLiteDatabase.CursorFactory?): SQLiteOpenHelper(context, DATABASE_NAME, factory,
                         DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -105,9 +104,9 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
             cursor.moveToFirst()
 
             val id = Integer.parseInt(cursor.getString(0))
-            val catId = Integer.parseInt(cursor.getString(1))
+            val categoryId = Integer.parseInt(cursor.getString(1))
             val catName = cursor.getString(2)
-            category = Categories(id, catId, catName)
+            category = Categories(id, categoryId, catName)
             cursor.close()
         }
 
@@ -126,6 +125,29 @@ class DatabaseHandler(context: Context, name: String?, factory: SQLiteDatabase.C
         val db = this.writableDatabase
         db.insert(TABLE_COMPLETED_QUIZ, null, values)
         db.close()
+    }
+
+    fun findCompletedQuizByRow(id: Any): CompletedQuiz? {
+        var quiz: CompletedQuiz? = null
+
+        val query = "SELECT * FROM $TABLE_COMPLETED_QUIZ WHERE $CQ_COLUMN_ID = \"$id\""
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst()
+            val row = Integer.parseInt(cursor.getString(0))
+            val catId = Integer.parseInt(cursor.getString(1))
+            val difficulty = cursor.getString(2)
+            val results = cursor.getString(3)
+            val percentage = Integer.parseInt(cursor.getString(4))
+            val date = cursor.getString(5)
+            quiz = CompletedQuiz(row, catId, difficulty, results, percentage, date)
+            cursor.close()
+        }
+
+        db.close()
+        return quiz
     }
 
     fun findAllCompletedQuizzes(): List<CompletedQuiz?> {

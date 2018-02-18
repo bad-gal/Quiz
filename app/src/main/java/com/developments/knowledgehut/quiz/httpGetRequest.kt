@@ -49,6 +49,3 @@ class HttpGetRequest: AsyncTask<String, Void, String>() {
         super.onPostExecute(result)
     }
 }
-
-
-

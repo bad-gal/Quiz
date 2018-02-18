@@ -14,4 +14,9 @@
     <string name="exit">Exit</string>
     <string name="history">History</string>
     <string name="home">Home</string>
+    <string name="category">Category goes here</string>
+    <string name="date">Date goes here</string>
+    <string name="score">Score goes here</string>
+    <string name="old_quiz_title">Title</string>
+    <string name="old_quiz_subtitle">Subtitle</string>
 </resources>

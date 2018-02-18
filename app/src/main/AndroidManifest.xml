@@ -20,5 +20,6 @@
         <activity android:name=".DetailActivity">
         </activity>
         <activity android:name=".SavedQuizzesActivity" />
+        <activity android:name=".ViewOldQuiz" />
     </application>
 </manifest>
