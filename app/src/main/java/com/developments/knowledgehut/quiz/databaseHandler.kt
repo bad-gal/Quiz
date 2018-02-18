@@ -52,7 +52,7 @@ class DatabaseHandler(context: Context, factory: SQLiteDatabase.CursorFactory?):
         private const val CQ_DIFFICULTY = "difficulty"
     }
 
-    fun recordExists(catId: String): Boolean {
+    private fun recordExists(catId: String): Boolean {
         val query = "SELECT * FROM $TABLE_CATEGORIES WHERE $COLUMN_CATEGORY_ID=\"$catId\""
         val db = this.writableDatabase
         val cursor = db.rawQuery(query, null)

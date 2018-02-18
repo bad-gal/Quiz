@@ -11,7 +11,7 @@ import android.widget.TextView
 
 
 
-class QuizAdapter(val context: Context,  val items: List<OldResult>): BaseAdapter() {
+class QuizAdapter(context: Context, private val items: List<OldResult>): BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     @SuppressLint("ViewHolder")

@@ -41,11 +41,6 @@ class HttpGetRequest: AsyncTask<String, Void, String>() {
             e.printStackTrace()
             result = ""
         }
-
         return result
-    }
-
-    override fun onPostExecute(result: String?) {
-        super.onPostExecute(result)
     }
 }

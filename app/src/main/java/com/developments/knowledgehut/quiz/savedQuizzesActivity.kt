@@ -1,5 +1,6 @@
 package com.developments.knowledgehut.quiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,7 +29,7 @@ class SavedQuizzesActivity : AppCompatActivity() {
         lv_quiz_completed.adapter = adapter
 
         lv_quiz_completed.onItemClickListener= AdapterView.OnItemClickListener(
-                { adapt: AdapterView<*>, _: View, i: Int, _: Long ->
+                { _: AdapterView<*>, _: View, i: Int, _: Long ->
                     val oldQuizIntent = Intent()
                     oldQuizIntent.setClass(this, ViewOldQuiz().javaClass)
                     oldQuizIntent.putExtra("completed_quiz_row", i + 1)
@@ -43,6 +44,7 @@ class SavedQuizzesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getCompletedQuizList() : List<String?> {
         val dbHelper = DatabaseHandler(this, null)
         val list = dbHelper.findAllCompletedQuizzes()
