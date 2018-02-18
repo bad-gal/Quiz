@@ -35,12 +35,11 @@ class ViewOldQuiz : AppCompatActivity() {
             val quiz = dbHelper.findCompletedQuizByRow(completedQuizRow)
             val cat = quiz?.catId.toString()
             val category = dbHelper.findCategoryByCatId(cat)
-            println(quiz)
             tv_category.text = category?.category
-            tv_percent.text = "Correctness = " + quiz?.percent?.let { Integer.toString(it) + "%" }
+            tv_percent.text = "Correct: " + quiz?.percent?.let { Integer.toString(it) + "%" }
             val timestampToLong = quiz?.timestamp?.toLong()
             if (timestampToLong != null) {
-                tv_date.text = "Completed on " + SimpleDateFormat("dd/MM/yyyy").format(Date(timestampToLong))
+                tv_date.text = "Completed: " + SimpleDateFormat("dd/MM/yyyy").format(Date(timestampToLong))
             }
             val completedList = quizDetails(quiz)
             val adapter = QuizAdapter(this, completedList)
@@ -64,7 +63,6 @@ class ViewOldQuiz : AppCompatActivity() {
                 userAnswer = "A: " + userAnswer
                 val result = OldResult(question, userAnswer, correct)
                 list.add(result)
-                println(question)
             }
         }
         return list

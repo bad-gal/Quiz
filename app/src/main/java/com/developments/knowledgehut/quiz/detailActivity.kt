@@ -60,7 +60,6 @@ class DetailActivity: AppCompatActivity() {
         progressBar2.max = questions.size
         progressBar2.progress = 0
 
-        println(questions.toString())
         setRadioButtons(buttonlist, choices[0])
 
         rg_choices.setOnCheckedChangeListener { _, checkedId ->
@@ -89,8 +88,6 @@ class DetailActivity: AppCompatActivity() {
                     val completedQuiz = CompletedQuiz(categoryId, level, convertIt, percentage, Date().time.toString())
                     dbHelper.addCompletedQuiz(completedQuiz)
                     val allQuizzesCompleted = dbHelper.findAllCompletedQuizzes()
-                    println(allQuizzesCompleted.toString())
-
             } else {
                 showNextQuestion(questionIndex, questions, buttonlist, choices)
                 btn_next.visibility = View.INVISIBLE

@@ -161,7 +161,6 @@ class MainActivity : AppCompatActivity() {
 
         if (categoryEntry != null) {
             category = "category=" + categoryEntry.catId
-            println(baseUrl + category + difficulty)
             return baseUrl + category + difficulty
         }
         return ""
